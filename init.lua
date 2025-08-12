@@ -698,6 +698,8 @@ require('lazy').setup({
             },
           },
         },
+        clangd = {},
+        pyright = {},
       }
 
       -- Ensure the servers and tools above are installed
