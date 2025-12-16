@@ -918,6 +918,21 @@ require('lazy').setup({
       }
     end,
   },
+  {
+
+    'projekt0n/github-nvim-theme',
+    name = 'github-theme',
+    lazy = false,
+    priority = 998,
+    config = function()
+      require('github-theme').setup {
+        options = {
+          transparent = false,
+        },
+      }
+      vim.cmd 'colorscheme github_dark'
+    end,
+  },
   -- Highlight todo, notes, etc in comments
   {
     'folke/todo-comments.nvim',
