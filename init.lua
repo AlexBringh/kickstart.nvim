@@ -369,6 +369,36 @@ require('lazy').setup({
   --
   -- Use the `dependencies` key to specify the dependencies of a particular plugin
 
+  {
+    -- Neo-Tree file tree plugin
+    'nvim-neo-tree/neo-tree.nvim',
+    version = '*',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-tree/nvim-web-devicons',
+      'MunifTanjim/nui.nvim',
+    },
+    config = function()
+      require('neo-tree').setup {
+        -- Add custom configuration here
+        event_handlers = {
+          {
+            event = 'neo_tree_buffer_enter',
+            handler = function()
+              vim.opt_local.number = true
+              vim.opt_local.relativenumber = true
+            end,
+          },
+        },
+        filesystem = {
+          hijack_netrw_behavior = 'disabled',
+        },
+      }
+      -- Example keymap to toggle
+      vim.keymap.set('n', '<leader>t', ':Neotree toggle<CR>', { desc = 'Toggle Neo-tree' })
+    end,
+  },
+
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
