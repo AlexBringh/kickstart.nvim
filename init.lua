@@ -104,6 +104,14 @@ vim.o.number = true
 --  Experiment for yourself to see if you like it!
 vim.o.relativenumber = true
 
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'netrw',
+  callback = function()
+    vim.opt_local.number = false
+    vim.opt_local.relativenumber = true
+  end,
+})
+
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
 
@@ -928,6 +936,8 @@ require('lazy').setup({
       require('github-theme').setup {
         options = {
           transparent = false,
+          compile_path = vim.fn.stdpath 'cache' .. '/github-theme',
+          compile_file_suffix = '_compiled',
         },
       }
       vim.cmd 'colorscheme github_dark'
