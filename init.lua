@@ -393,9 +393,14 @@ require('lazy').setup({
         filesystem = {
           hijack_netrw_behavior = 'disabled',
         },
+        window = {
+          mappings = {
+            ['<leader>T'] = 'close_window',
+          },
+        },
       }
       -- Example keymap to toggle
-      vim.keymap.set('n', '<leader>t', ':Neotree toggle<CR>', { desc = 'Toggle Neo-tree' })
+      vim.keymap.set('n', '<leader>T', ':Neotree toggle<CR>', { desc = '[T]oggle Neo-[T]ree' })
     end,
   },
 
