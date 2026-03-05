@@ -400,7 +400,8 @@ require('lazy').setup({
         },
       }
       -- Example keymap to toggle
-      vim.keymap.set('n', '<leader>T', ':Neotree toggle<CR>', { desc = '[T]oggle Neo-[T]ree' })
+      vim.keymap.set('n', '<leader>n', ':Neotree toggle<CR>', { desc = 'Toggle [N]eo-Tree' })
+      vim.keymap.set('ca', 'nt', 'Neotree toggle')
     end,
   },
 
