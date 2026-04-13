@@ -976,9 +976,10 @@ require('lazy').setup({
           compile_file_suffix = '_compiled',
         },
       }
-      vim.cmd 'colorscheme github_dark'
+      -- vim.cmd 'colorscheme github_dark'
     end,
   },
+
   -- Highlight todo, notes, etc in comments
   {
     'folke/todo-comments.nvim',
@@ -1036,10 +1037,10 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
+    main = 'nvim-treesitter.config', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'cpp', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'python' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1047,9 +1048,11 @@ require('lazy').setup({
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
+        --   additional_vim_regex_highlighting = { 'ruby' },
+        additional_vim_regex_highlighting = false,
       },
-      indent = { enable = true, disable = { 'ruby' } },
+      -- indent = { enable = true, disable = { 'ruby' } },
+      indent = true,
     },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
@@ -1107,8 +1110,37 @@ require('lazy').setup({
   },
 })
 
+-- Add more defined window split-separators
+vim.opt.fillchars = {
+  vert = '│', -- vertical split
+  horiz = '─', -- horizontal split
+}
+vim.api.nvim_set_hl(0, 'WinSeparator', { fg = '#3b4261', bold = true })
+--vim.opt.laststatus = 3 -- global statusline (Neovim 0.7+)
+vim.opt.splitright = true
+vim.opt.splitbelow = true
+
 vim.opt['tabstop'] = 4
 vim.opt['shiftwidth'] = 4
+
+-- List of languages you want to force Treesitter on
+local ft_whitelist = { 'python', 'c', 'cpp', 'h', 'lua', 'javascript', 'typescript', 'rust', 'go' }
+
+vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufNewFile' }, {
+  callback = function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    local ft = vim.bo[bufnr].filetype
+
+    -- Check if the current filetype is in our whitelist
+    if vim.tbl_contains(ft_whitelist, ft) then
+      -- Get the corresponding Treesitter language
+      local lang = vim.treesitter.language.get_lang(ft)
+      if lang then
+        vim.treesitter.start(bufnr, lang)
+      end
+    end
+  end,
+})
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
