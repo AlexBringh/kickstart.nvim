@@ -217,7 +217,7 @@ vim.keymap.set('n', '<leader>e', ':Explore<CR>', { desc = 'Open file [e]xplorer'
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
 --  Buffer navigation commands
-vim.keymap.set('n', 'gl', ':b#', { desc = 'Go to last buffer opened in window.' })
+vim.keymap.set('n', 'gl', ':b#\n', { desc = 'Go to last buffer opened in window.' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -1127,6 +1127,8 @@ vim.opt.splitbelow = true
 vim.opt['tabstop'] = 4
 vim.opt['shiftwidth'] = 4
 
+-- User functions
+
 -- List of languages you want to force Treesitter on
 local ft_whitelist = { 'python', 'c', 'cpp', 'h', 'lua', 'javascript', 'typescript', 'rust', 'go' }
 
@@ -1145,6 +1147,26 @@ vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufNewFile' }, {
     end
   end,
 })
+
+vim.api.nvim_create_user_command('CloseHiddenBuffers', function()
+  local visible_buffers = {}
+  -- Get all buffers visible in all tabs
+  for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
+    for _, win in ipairs(vim.api.nvim_tabpage_list_wins(tab)) do
+      visible_buffers[vim.api.nvim_win_get_buf(win)] = true
+    end
+  end
+
+  -- Delete all listed buffers that aren't visible
+  for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.bo[bufnr].buflisted and not visible_buffers[bufnr] then
+      -- Only delete if the buffer isn't modified
+      if not vim.api.nvim_buf_get_option(bufnr, 'modified') then
+        vim.api.nvim_buf_delete(bufnr, {})
+      end
+    end
+  end
+end, { desc = 'Close all buffers not visible in any tab' })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
