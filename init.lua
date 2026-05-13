@@ -944,6 +944,18 @@ require('lazy').setup({
         styles = {
           comments = { italic = false }, -- Disable italics in comments
         },
+        style = 'night',
+        on_highlights = function(hl, c)
+          -- 1. Make comments brighter
+          -- 'c.orange' or 'c.yellow' are good high-contrast choices
+          hl.Comment = { fg = '#9ba7c2', italic = false }
+
+          -- 2. Improve Tab Contrast (Native Tabs)
+          -- The active tab
+          hl.TabLineSel = { bg = '#7aa1f5', fg = '#101726', bold = false }
+          -- Inactive tabs (making them slightly brighter than the background)
+          hl.TabLine = { fg = '#9ba7c2' }
+        end,
       }
 
       -- Load the colorscheme here.
