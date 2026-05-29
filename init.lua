@@ -204,6 +204,9 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- File explorer keymaps
 vim.keymap.set('n', '<leader>e', ':Explore<CR>', { desc = 'Open file [e]xplorer' })
 
+-- Search Register keymaps
+vim.keymap.set({ 'v', 'n' }, '<leader>r', ':Telescope registers<CR>', { desc = 'Search [R]egisters' })
+
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
@@ -218,6 +221,9 @@ vim.keymap.set('n', 'gl', ':b#\n', { desc = 'Go to last buffer opened in window.
 vim.keymap.set({ 'n', 'v' }, 'x', '"_x')
 -- Remap '_p' in Visual Mode to paste without overwriting your clipboard
 vim.keymap.set('v', '_p', '"_dP', { desc = 'Paste over selection to black hole' })
+-- Shortcuts for '"_d', '"_c'
+vim.keymap.set({ 'v', 'n' }, '<leader>d', '"_d', { desc = 'Void buffer [d]elete operator' })
+vim.keymap.set({ 'v', 'n' }, '<leader>c', '"_c', { desc = 'Void buffer [c]hange operator' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
