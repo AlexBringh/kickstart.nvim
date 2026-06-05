@@ -207,6 +207,10 @@ vim.keymap.set('n', '<leader>e', ':Explore<CR>', { desc = 'Open file [e]xplorer'
 -- Search Register keymaps
 vim.keymap.set({ 'v', 'n' }, '<leader>r', ':Telescope registers<CR>', { desc = 'Search [R]egisters' })
 
+-- Document / Workspace symbols
+vim.keymap.set('n', '<leader>O', ':Telescope lsp_document_symbols<CR>', { desc = '[O]pen Document Symbols' })
+vim.keymap.set('n', '<leader>W', ':Telescope lsp_workspace_symbols<CR>', { desc = 'Open [W]orkspace Symbols' })
+
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
@@ -777,6 +781,13 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'pyright',
+        'clangd',
+        'neocmakelsp',
+        'css-lsp',
+        'html-lsp',
+        'vtsls',
+        'lua-language-server',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
