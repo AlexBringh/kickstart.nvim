@@ -303,18 +303,13 @@ require('lazy').setup({
     version = '*',
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'nvim-tree/nvim-web-devicons',
+      'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
       'MunifTanjim/nui.nvim',
     },
+    lazy = false,
     config = function()
-      require('nvim-neo-tree/neo-tree.nvim').setup {
+      require('neo-tree').setup {
         -- Add custom configuration here
-        dependencies = {
-          'nvim-lua/plenary.nvim',
-          'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-          'MunifTanjim/nui.nvim',
-        },
-        lazy = false,
         event_handlers = {
           {
             event = 'neo_tree_buffer_enter',
