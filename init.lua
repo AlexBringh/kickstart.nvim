@@ -850,7 +850,7 @@ require('lazy').setup({
 
           -- 2. Improve Tab Contrast (Native Tabs)
           -- The active tab
-          hl.TabLineSel = { bg = '#7aa1f5', fg = '#101726', bold = false }
+          hl.TabLineSel = { bg = c.blue, fg = c.bg_dark, bold = true }
           -- Inactive tabs (making them slightly brighter than the background)
           hl.TabLine = { fg = '#9ba7c2' }
 
@@ -866,28 +866,41 @@ require('lazy').setup({
     end,
   },
   {
-    'gbprod/nord.nvim',
-    priority = 999,
+    'rebelot/kanagawa.nvim',
+    priority = 1000,
     config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('nord').setup {
-        styles = {
-          comments = { italic = false }, -- Disable italics in comments
+      require('kanagawa').setup {
+        options = {
+          transparent = false,
         },
+        overrides = function(colors)
+          return {
+            LineNr = { fg = colors.palette.fujiGray, bg = colors.theme.ui.bg_gutter },
+            LineNrAbove = { fg = colors.palette.fujiGray, bg = colors.theme.ui.bg_gutter },
+            LineNrBelow = { fg = colors.palette.fujiGray, bg = colors.theme.ui.bg_gutter },
+            TabLineSel = { bg = colors.palette.sumiInk6, fg = colors.palette.fujiWhite, bold = true },
+            TabLine = { fg = colors.palette.fujiGray },
+          }
+        end,
       }
+
+      -- vim.cmd.colorscheme 'kanagawa'
     end,
   },
   {
-    'projekt0n/github-nvim-theme',
-    name = 'github-theme',
-    lazy = false,
-    priority = 998,
+    'EdenEast/nightfox.nvim',
+    priority = 1000,
     config = function()
-      require('github-theme').setup {
-        options = {
-          transparent = false,
-          compile_path = vim.fn.stdpath 'cache' .. '/github-theme',
-          compile_file_suffix = '_compiled',
+      require('nightfox').setup {
+        styles = {
+          bold = false,
+          italic = false,
+          transparancy = false,
+        },
+        groups = {
+          all = {
+            TabLineSel = { fg = 'palette.fg0', bg = 'palette.bg4', style = 'bold' },
+          },
         },
       }
     end,
