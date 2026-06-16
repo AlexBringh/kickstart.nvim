@@ -141,8 +141,12 @@ vim.keymap.set({ 'n', 'v' }, 'x', '"_x')
 -- Remap '_p' in Visual Mode to paste without overwriting your clipboard
 vim.keymap.set('v', '_p', '"_dP', { desc = 'Paste over selection to black hole' })
 -- Shortcuts for '"_d', '"_c'
-vim.keymap.set({ 'v', 'n' }, '<leader>d', '"_d', { desc = 'Void buffer [d]elete operator' })
-vim.keymap.set({ 'v', 'n' }, '<leader>c', '"_c', { desc = 'Void buffer [c]hange operator' })
+vim.keymap.set({ 'v', 'n' }, '<leader>vd', '"_d', { desc = 'Void buffer [d]elete operator' })
+vim.keymap.set({ 'v', 'n' }, '<leader>vc', '"_c', { desc = 'Void buffer [c]hange operator' })
+vim.keymap.set('n', '<leader>vh', ':CloseHiddenBuffers<CR>', { desc = ' Close [H]idden buffers' })
+
+-- Shortcut for opening color theme selector
+vim.keymap.set({ 'v', 'n' }, '<leader>tc', ':Telescope colorscheme<CR>', { desc = '[C]olor theme menu' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -285,6 +289,7 @@ require('lazy').setup({
       spec = {
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
+        { '<leader>v', group = '[V]oid buffer' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
       },
     },
