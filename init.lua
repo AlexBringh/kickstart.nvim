@@ -866,8 +866,7 @@ require('lazy').setup({
           hl.CursorLineNr = { fg = c.orange, bold = true }
         end,
       }
-
-      vim.cmd.colorscheme 'tokyonight-night'
+      -- vim.cmd.colorscheme 'tokyonight-night'
     end,
   },
   {
@@ -908,6 +907,8 @@ require('lazy').setup({
           },
         },
       }
+
+      vim.cmd.colorscheme 'nightfox'
     end,
   },
 
