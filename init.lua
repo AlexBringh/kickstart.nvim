@@ -120,11 +120,11 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 vim.keymap.set('n', '<leader>e', ':Explore<CR>', { desc = 'Open file [e]xplorer' })
 
 -- Search Register keymaps
-vim.keymap.set({ 'v', 'n' }, '<leader>r', ':Telescope registers<CR>', { desc = 'Search [R]egisters' })
+vim.keymap.set({ 'v', 'n' }, '<leader>or', ':Telescope registers<CR>', { desc = 'Open [R]egisters' })
 
 -- Document / Workspace symbols
-vim.keymap.set('n', '<leader>O', ':Telescope lsp_document_symbols<CR>', { desc = '[O]pen Document Symbols' })
-vim.keymap.set('n', '<leader>W', ':Telescope lsp_workspace_symbols<CR>', { desc = 'Open [W]orkspace Symbols' })
+vim.keymap.set('n', '<leader>od', ':Telescope lsp_document_symbols<CR>', { desc = 'Open [D]ocument Symbols' })
+vim.keymap.set('n', '<leader>ow', ':Telescope lsp_workspace_symbols<CR>', { desc = 'Open [W]orkspace Symbols' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -133,7 +133,7 @@ vim.keymap.set('n', '<leader>W', ':Telescope lsp_workspace_symbols<CR>', { desc 
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
 -- Buffer navigation commands
-vim.keymap.set('n', 'gl', ':b#\n', { desc = 'Go to last buffer opened in window.' })
+vim.keymap.set('n', 'gl', ':b#\n', { desc = 'Go to [l]ast buffer opened in window.' })
 
 -- Yanking and deleting keymaps
 -- Make 'x' delete and send deleted text to the void buffer
@@ -146,7 +146,14 @@ vim.keymap.set({ 'v', 'n' }, '<leader>vc', '"_c', { desc = 'Void buffer [c]hange
 vim.keymap.set('n', '<leader>vh', ':CloseHiddenBuffers<CR>', { desc = ' Close [H]idden buffers' })
 
 -- Shortcut for opening color theme selector
-vim.keymap.set({ 'v', 'n' }, '<leader>tc', ':Telescope colorscheme<CR>', { desc = '[C]olor theme menu' })
+vim.keymap.set({ 'v', 'n' }, '<leader>oc', ':Telescope colorscheme<CR>', { desc = 'Open [C]olor theme menu' })
+
+-- Open full syntax error diagnostic
+vim.keymap.set('n', '<leader>oe', vim.diagnostic.open_float, { desc = 'Open Syntax [E]rrors' })
+
+-- Neotree keybinds
+vim.keymap.set('n', '<leader>tn', ':Neotree toggle<CR>', { desc = 'Toggle [N]eo-Tree' })
+vim.keymap.set('ca', 'nt', 'Neotree toggle')
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -288,6 +295,7 @@ require('lazy').setup({
       -- Document existing key chains
       spec = {
         { '<leader>s', group = '[S]earch' },
+        { '<leader>o', group = '[O]pen' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>v', group = '[V]oid buffer' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
@@ -333,9 +341,6 @@ require('lazy').setup({
           },
         },
       }
-      -- Example keymap to toggle
-      vim.keymap.set('n', '<leader>n', ':Neotree toggle<CR>', { desc = 'Toggle [N]eo-Tree' })
-      vim.keymap.set('ca', 'nt', 'Neotree toggle')
     end,
   },
 
