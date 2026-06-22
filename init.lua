@@ -117,7 +117,7 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- File explorer keymaps (netrw)
-vim.keymap.set('n', '<leader>e', ':Explore<CR>', { desc = 'Open file [e]xplorer' })
+vim.keymap.set('n', '<leader>oe', ':Explore<CR>', { desc = 'Open file [e]xplorer' })
 
 -- Search Register keymaps
 vim.keymap.set({ 'v', 'n' }, '<leader>or', ':Telescope registers<CR>', { desc = 'Open [R]egisters' })
@@ -154,6 +154,10 @@ vim.keymap.set('n', '<leader>oe', vim.diagnostic.open_float, { desc = 'Open Synt
 -- Neotree keybinds
 vim.keymap.set('n', '<leader>tn', ':Neotree toggle<CR>', { desc = 'Toggle [N]eo-Tree' })
 vim.keymap.set('ca', 'nt', 'Neotree toggle')
+
+-- Save session
+vim.keymap.set({ 'n', 'v' }, '<leader>ws', ':mksession!<CR>', { desc = 'Write [S]ession to Session.vim' })
+vim.keymap.set({ 'n', 'v' }, '<leader>wf', ':w<CR>', { desc = 'Write to current [F]ile' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -298,7 +302,9 @@ require('lazy').setup({
         { '<leader>o', group = '[O]pen' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>v', group = '[V]oid buffer' },
+        { '<leader>w', group = '[W]rite to' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { 'gr', group = 'LSP navigation' },
       },
     },
   },
