@@ -117,7 +117,7 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- File explorer keymaps (netrw)
-vim.keymap.set('n', '<leader>oe', ':Explore<CR>', { desc = 'Open file [e]xplorer' })
+vim.keymap.set('n', '<leader>e', ':Explore<CR>', { desc = 'Open file [e]xplorer' })
 
 -- Search Register keymaps
 vim.keymap.set({ 'v', 'n' }, '<leader>or', ':Telescope registers<CR>', { desc = 'Open [R]egisters' })
@@ -150,6 +150,9 @@ vim.keymap.set({ 'v', 'n' }, '<leader>oc', ':Telescope colorscheme<CR>', { desc 
 
 -- Open full syntax error diagnostic
 vim.keymap.set('n', '<leader>oe', vim.diagnostic.open_float, { desc = 'Open Syntax [E]rrors' })
+
+-- Open TODO tree list
+vim.keymap.set('n', '<leader>ot', ':TodoTelescope<CR>', { desc = 'Open [T]ODO-tree list' })
 
 -- Neotree keybinds
 vim.keymap.set('n', '<leader>tn', ':Neotree toggle<CR>', { desc = 'Toggle [N]eo-Tree' })
