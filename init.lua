@@ -676,6 +676,7 @@ require('lazy').setup({
         clangd = {},
         pyright = {},
         neocmakelsp = {},
+        texlab = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -689,6 +690,7 @@ require('lazy').setup({
         'pyright',
         'clangd',
         'neocmakelsp',
+        'texlab',
         'css-lsp',
         'html-lsp',
         'vtsls',
