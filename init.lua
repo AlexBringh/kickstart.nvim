@@ -1055,7 +1055,7 @@ require('lazy').setup({
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
 
-  { dir = '~/.config/nvim/lua/custom/plugins/flatbuffers.nvim' },
+  { dir = vim.fn.stdpath 'config' .. '/lua/custom/plugins/flatbuffers.nvim' },
 
   -- Some more plugins in different files
   -- require 'kickstart.plugins.debug',
