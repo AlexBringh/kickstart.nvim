@@ -162,6 +162,12 @@ vim.keymap.set('ca', 'nt', 'Neotree toggle')
 vim.keymap.set({ 'n', 'v' }, '<leader>ws', ':mksession!<CR>', { desc = 'Write [S]ession to Session.vim' })
 vim.keymap.set({ 'n', 'v' }, '<leader>wf', ':w<CR>', { desc = 'Write to current [F]ile' })
 
+-- Style formatting
+vim.keymap.set({ 'n', 'v' }, '<leader>ta', ':FormatToggle<CR>', { desc = 'Toggle [A]uto-format on save globally' })
+vim.keymap.set({ 'n', 'v' }, '<leader>tA', ':FormatToggle!<CR>', { desc = 'Toggle [Auto-format on save for current buffer' })
+vim.keymap.set({ 'n', 'v' }, '<leader>ts', ':FormatStyleToggle<CR>', { desc = 'Toggle [S]tyleguide' })
+vim.keymap.set({ 'n', 'v' }, '<leader>tS', 'FormatStatus<CR>', { desc = 'Show what [S]tyleguide is currently active' })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -673,7 +679,9 @@ require('lazy').setup({
             },
           },
         },
-        clangd = {},
+        clangd = {
+          cmd = { 'clangd', '--fallback-style=Google' },
+        },
         pyright = {},
         neocmakelsp = {},
         texlab = {},
@@ -689,6 +697,7 @@ require('lazy').setup({
         'stylua', -- Used to format Lua code
         'pyright',
         'clangd',
+        'yapf',
         'neocmakelsp',
         'texlab',
         'css-lsp',
@@ -732,10 +741,13 @@ require('lazy').setup({
     opts = {
       notify_on_error = false,
       format_on_save = function(bufnr)
+        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+          return nil
+        end
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = {}
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
@@ -747,11 +759,44 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        python = { 'yapf' },
+        c = { 'clang-format' },
+        cpp = { 'clang-format' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      },
+      formatters = {
+        yapf = {
+          prepend_args = function(self, ctx)
+            -- If project config exists, let yapf use it
+            local local_style =
+              vim.fs.find({ '.style.yapf', 'setup.cfg', 'pyproject.toml' }, { upward = true, path = ctx.dirname, stop = vim.fn.expand '~' })[1]
+            if local_style then
+              return {}
+            end
+
+            -- Fallback
+            if vim.g.format_style == 'default' then
+              return {}
+            end
+            return { '--style', vim.g.format_style or 'google' }
+          end,
+        },
+        ['clang-format'] = {
+          prepend_args = function(self, ctx)
+            if vim.g.format_style == 'default' then
+              return {}
+            end
+            local style = vim.g.format_style or 'google'
+            if style == 'google' then
+              style = 'Google'
+            end
+            return { '--fallback-style=' .. style }
+          end,
+        },
       },
     },
   },
@@ -1096,6 +1141,56 @@ vim.api.nvim_create_user_command('CloseHiddenBuffers', function()
     end
   end
 end, { desc = 'Close all buffers not visible in any tab' })
+
+vim.api.nvim_create_user_command('FormatToggle', function(args)
+  if args.bang then
+    vim.b.disable_autoformat = not vim.b.disable_autoformat
+    print('Buffer autoformat-on-save is now ' .. (vim.b.disable_autoformat and 'disabled' or 'enabled'))
+  else
+    vim.g.disable_autoformat = not vim.g.disable_autoformat
+    print('Global autoformat-on-save is now ' .. (vim.g.disable_autoformat and 'disabled' or 'enabled'))
+  end
+end, {
+  desc = 'Toggle autoformat-on-save',
+  bang = true,
+})
+
+vim.g.format_style = 'google'
+vim.api.nvim_create_user_command('FormatStyleToggle', function()
+  if vim.g.format_style == 'google' then
+    vim.g.format_style = 'default'
+  else
+    vim.g.format_style = 'google'
+  end
+  print('Format style is now ' .. vim.g.format_style)
+end, {
+  desc = 'Toggle formatting style between google and default',
+})
+
+vim.api.nvim_create_user_command('FormatStatus', function()
+  local filetype = vim.bo.filetype
+  local is_disabled = vim.g.disable_autoformat or vim.b.disable_autoformat
+  local status = 'Auto-format is ' .. (is_disabled and 'DISABLED' or 'ENABLED')
+
+  if filetype == 'c' or filetype == 'cpp' then
+    local local_style = vim.fs.find('.clang-format', { upward = true, stop = vim.fn.expand '~' })[1]
+    if local_style then
+      status = status .. ' | Style: Project config (' .. local_style .. ')'
+    else
+      status = status .. ' | Style: Fallback (' .. (vim.g.format_style or 'google') .. ')'
+    end
+  elseif filetype == 'python' then
+    local local_style = vim.fs.find({ '.style.yapf', 'setup.cfg', 'pyproject.toml' }, { upward = true, stop = vim.fn.expand '~' })[1]
+    if local_style then
+      status = status .. ' | Style: Project config (' .. local_style .. ')'
+    else
+      status = status .. ' | Style: Fallback (' .. (vim.g.format_style or 'google') .. ')'
+    end
+  else
+    status = status .. ' | Style: ' .. filetype .. ' default'
+  end
+  print(status)
+end, { desc = 'Check active formatting status and style' })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
