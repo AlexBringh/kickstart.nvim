@@ -195,7 +195,7 @@ wsl --install
 wsl
 sudo add-apt-repository ppa:neovim-ppa/unstable -y
 sudo apt update
-sudo apt install make gcc ripgrep unzip git xclip neovim
+sudo apt install build-essential ripgrep fd-find unzip git xclip nodejs npm python3-venv neovim
 ```
 </details>
 
@@ -205,7 +205,7 @@ sudo apt install make gcc ripgrep unzip git xclip neovim
 ```
 sudo add-apt-repository ppa:neovim-ppa/unstable -y
 sudo apt update
-sudo apt install make gcc ripgrep unzip git xclip neovim
+sudo apt install build-essential ripgrep fd-find unzip git xclip nodejs npm python3-venv neovim
 ```
 </details>
 <details><summary>Debian Install Steps</summary>
