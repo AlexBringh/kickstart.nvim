@@ -1119,7 +1119,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufNewFile' }, {
         -- Attempt to start Treesitter highlighting and catch any load/parse errors gracefully
         local success, _ = pcall(vim.treesitter.start, bufnr, lang)
         if not success then
-          vim.notify("Treesitter parser not found/failed to load for: " .. lang, vim.log.levels.WARN)
+          vim.notify('Treesitter parser not found/failed to load for: ' .. lang, vim.log.levels.WARN)
         end
       end
     end
